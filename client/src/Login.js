@@ -5,6 +5,7 @@ import { Button, Input } from "reactstrap";
 export default function Login() {
   let navigate = useNavigate();
   const [name, setName] = useState("");
+  const [error, setError] = useState(null);
 
   const login = async () => {
     const response = await fetch(`${process.env.REACT_APP_SERVER_URL}/user/login`, {
@@ -19,6 +20,7 @@ export default function Login() {
       localStorage.setItem("username", name)
       return navigate("/dashboard");
     }
+    setError('No user found')
 
   };
 
@@ -31,6 +33,9 @@ export default function Login() {
       >
         <Input value={name} type="text" onChange={(e) => setName(e.target.value)} />
         <Button className="mt-4" onClick={login}>Login</Button>
+        {error ?
+        <p className="text-danger"> No user found </p>
+        : null}
       </div>
     </div>
   );
