@@ -25,6 +25,32 @@ https://user-images.githubusercontent.com/26713649/193449051-4d928ff7-5827-4c5e-
    Provide env variables (see .env.example)
 
    Be sure to have mongo installed and running on your local machine
+   
+   Create at least one User 
+   
+
+- POST /user
+```typescript
+
+export enum Status {
+  WORKING = 'working',
+  VACATION = 'vacation',
+  SICKNESS = 'sickness',
+}
+
+export class CreateUserDto {
+  @IsString()
+  name: string;
+
+  @IsEnum(Status)
+  status: Status;
+}
+
+export class UpdateUserDto {
+  @IsEnum(Status)
+  status: Status;
+}
+```
 
       cd server
       npm install
