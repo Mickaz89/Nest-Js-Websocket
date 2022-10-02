@@ -45,11 +45,6 @@ export class CreateUserDto {
   @IsEnum(Status)
   status: Status;
 }
-
-export class UpdateUserDto {
-  @IsEnum(Status)
-  status: Status;
-}
 ```
 
       cd server
