@@ -3,10 +3,14 @@ import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { User, UserDocument } from './user.schema';
 import { CreateUserDto, UpdateUserDto } from './dtos/create-user.dto';
+import { EventsGateway } from 'src/events/events.gateway';
 
 @Injectable()
 export class UserService {
-  constructor(@InjectModel(User.name) private userModel: Model<UserDocument>) {}
+  constructor(
+    @InjectModel(User.name) private userModel: Model<UserDocument>,
+    private readonly eventsGatewayService: EventsGateway,
+    ) {}
 
   async create(createUserDto: CreateUserDto): Promise<User> {
     const createdCat = new this.userModel(createUserDto);
@@ -25,7 +29,12 @@ export class UserService {
     const user = await this.userModel.findOne({ name: username });
     user.status = updateUserDto.status;
     user.updatedAt = now();
-    return await user.save();
+    const updatedUser = await user.save();
+
+    // Emit event
+    this.eventsGatewayService.server.emit('events', updateUserDto.status);
+
+    return updatedUser
   }
 
   async findOne(username: string) {

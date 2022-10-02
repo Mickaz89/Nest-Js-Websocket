@@ -40,8 +40,6 @@ export class UserController {
     @Param('username') username: string,
     @Body() updateUserDto: UpdateUserDto,
   ): Promise<User> {
-    const user = this.userService.updateStatus(username, updateUserDto);
-    this.eventsGatewayService.server.emit('events', updateUserDto.status);
-    return user;
+    return this.userService.updateStatus(username, updateUserDto);
   }
 }
